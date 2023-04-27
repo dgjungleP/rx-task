@@ -8,4 +8,5 @@ public interface TaskManagement<C extends TaskConsumer, Q extends TaskQueue> {
     C registerConsumer();
 
     Q getTaskQueue();
+
 }

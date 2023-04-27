@@ -7,4 +7,6 @@ public interface TaskConsumer {
 
     void start();
 
+    public void keepAlive();
+
 }

@@ -2,16 +2,19 @@ package com.jungle.task;
 
 import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.disposables.Disposable;
+import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 
+import java.time.Instant;
 import java.util.Collection;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
+@Slf4j
 public abstract class AbstractTaskConsumer<I, M extends Task> implements TaskConsumer {
     private final TaskQueue taskQueue;
-    private final Random random = new Random();
-    private Flowable flowable;
+    private Flowable<M> flowable;
     private Disposable disposable;
     private Long period;
     private TimeUnit timeUnit;
@@ -50,9 +53,21 @@ public abstract class AbstractTaskConsumer<I, M extends Task> implements TaskCon
         if (this.disposable != null && !this.disposable.isDisposed()) {
             disposable.dispose();
         }
-        this.registerConsumer();
-        Disposable disposable = flowable.subscribe();
+        startConsumer();
     }
 
+    public void keepAlive() {
+        if (this.disposable != null && this.disposable.isDisposed()) {
+            log.info("The Consumer is died at:{}，have a try to restart.", Instant.now());
+            startConsumer();
+        }
+    }
+
+    private void startConsumer() {
+        log.info("Start a Worker at:{} by Period:【{}】  TimeUnit:【{}】", Instant.now(),
+                this.period, this.timeUnit);
+        this.registerConsumer();
+        this.disposable = flowable.subscribe();
+    }
 
 }

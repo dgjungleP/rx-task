@@ -22,6 +22,7 @@ public class TaskTest {
                 })).setPeriod(50L)
                 .setTimeUnit(TimeUnit.MILLISECONDS).start();
         management.registerWorkerLine(20L, TimeUnit.MILLISECONDS, true);
+        management.startKeepAliveAndMonitor();
         TaskQueue taskQueue = management.getTaskQueue();
         while (true) {
         }
