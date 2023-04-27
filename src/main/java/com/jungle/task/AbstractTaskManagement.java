@@ -56,12 +56,19 @@ public abstract class AbstractTaskManagement<C extends TaskConsumer> implements 
     }
 
     private void keepAlive() {
-        if (this.workerDisposable != null && this.workerDisposable.isDisposed()) {
-            log.info("The Worker is died at:{}，have a try to restart.", Instant.now());
-            startWorker();
+        try {
+            if (this.workerDisposable != null && this.workerDisposable.isDisposed()) {
+                log.info("The Worker is died at:{}，have a try to restart.", Instant.now());
+                startWorker();
+            }
+            this.consumerList.forEach(TaskConsumer::keepAlive);
+        } catch (Exception e) {
+            log.error("The KeepAlive is died at:{}，Please Retry update", Instant.now());
+            doOnKeepAliveException();
         }
-        this.consumerList.forEach(TaskConsumer::keepAlive);
     }
+
+    public abstract void doOnKeepAliveException();
 
     private void startWorker() {
         log.info("Start a Worker at:{} by Period:【{}】  TimeUnit:【{}】  Sync:【{}】 ", Instant.now(), workerConfigHolder.period, workerConfigHolder.timeUnit, workerConfigHolder.sync);
