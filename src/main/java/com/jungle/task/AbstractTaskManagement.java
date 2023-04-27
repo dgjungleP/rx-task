@@ -68,7 +68,9 @@ public abstract class AbstractTaskManagement<C extends TaskConsumer> implements 
         }
     }
 
-    public abstract void doOnKeepAliveException();
+    public void doOnKeepAliveException() {
+    }
+
 
     private void startWorker() {
         log.info("Start a Worker at:{} by Period:【{}】  TimeUnit:【{}】  Sync:【{}】 ", Instant.now(), workerConfigHolder.period, workerConfigHolder.timeUnit, workerConfigHolder.sync);
