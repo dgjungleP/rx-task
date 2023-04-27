@@ -64,7 +64,7 @@ public abstract class AbstractTaskConsumer<I, M extends Task> implements TaskCon
     }
 
     private void startConsumer() {
-        log.info("Start a Worker at:{} by Period:【{}】  TimeUnit:【{}】", Instant.now(),
+        log.info("Start a Consumer at:{} by Period:【{}】  TimeUnit:【{}】", Instant.now(),
                 this.period, this.timeUnit);
         this.registerConsumer();
         this.disposable = flowable.subscribe();
