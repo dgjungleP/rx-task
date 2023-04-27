@@ -103,7 +103,7 @@ public abstract class AbstractTaskManagement<C extends TaskConsumer> implements 
     }
 
     public void startKeepAliveAndMonitor() {
-        this.checkAliveDisposable = Flowable.interval(workerConfigHolder.period, workerConfigHolder.timeUnit)
+        this.checkAliveDisposable = Flowable.interval(1, TimeUnit.MINUTES)
                 .onBackpressureDrop().subscribe((data) -> this.keepAlive());
     }
 
